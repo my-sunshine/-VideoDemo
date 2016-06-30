@@ -1,7 +1,8 @@
 # VideoDemo
 
-```Java
 ####1、
+```Java
+
 	compile 'com.hqgj:myvideo:0.3.4'
 
 ####2、
