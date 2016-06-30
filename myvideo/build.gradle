@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'video-demo'
+
+    publishedGroupId = 'com.hqgj'
+    libraryName = 'myvideo'
+    artifact = 'myvideo'
+
+    libraryDescription = 'Video Demo'
+
+    siteUrl = 'https://github.com/my-sunshine/VideoDemo'
+    gitUrl = 'https://github.com/my-sunshine/VideoDemo.git'
+
+    libraryVersion = '0.3.4'
+
+    developerId = 'hongji'
+    developerName = 'LI YI'
+    developerEmail = 'hongji474@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -23,3 +47,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
 }
+tasks.withType(Javadoc) {
+    options.encoding = "UTF-8"
+}
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

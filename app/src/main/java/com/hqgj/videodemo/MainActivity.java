@@ -18,6 +18,15 @@ public class MainActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_m);
 
+        /*
+        Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.drawable.test);
+        bitmap=NativeStackBlur.process(bitmap,200);
+
+        ImageView imageView= (ImageView) findViewById(R.id.img);
+
+        imageView.setImageBitmap(bitmap);
+        */
+
 
         videoRelativeLayout= (VideoRelativeLayout) findViewById(R.id.videoRelativeLayout);
         String path="http://7xrpiy.com1.z0.glb.clouddn.com/video%2F1.mp4";
@@ -26,7 +35,7 @@ public class MainActivity extends Activity {
         videoRelativeLayout.setOnClickVideoListener(new VideoRelativeLayout.OnClickVideoListener() {
             @Override
             public void onClickBack() {
-                Toast.makeText(MainActivity.this,"onClickBack",Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "onClickBack", Toast.LENGTH_LONG).show();
                 finish();
             }
 
@@ -37,12 +46,15 @@ public class MainActivity extends Activity {
         });
 
 
+
+
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        videoRelativeLayout.onPause();
+        //videoRelativeLayout.onPause();
     }
 
 }
