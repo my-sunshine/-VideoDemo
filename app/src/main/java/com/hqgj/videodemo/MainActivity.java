@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        //videoRelativeLayout.onPause();
+        videoRelativeLayout.onPause();
     }
 
 }

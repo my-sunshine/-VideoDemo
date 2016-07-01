@@ -100,9 +100,12 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
     public VideoRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
-        audioManager= (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        currentVolume=audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        maxVolume=audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        if(isInEditMode()){
+            return;
+        }
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         initView();
     }
 
@@ -137,15 +140,15 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
         this.addView(bottomContainer, bottomLayoutParams);
 
         //添加音量
-        volumeContainer=LayoutInflater.from(context).inflate(R.layout.layout_volume, null);
-        RelativeLayout.LayoutParams volumeLayoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+        volumeContainer = LayoutInflater.from(context).inflate(R.layout.layout_volume, null);
+        RelativeLayout.LayoutParams volumeLayoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         volumeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        volumeLayoutParams.leftMargin=DensityUtils.dp2px(context, 20);
+        volumeLayoutParams.leftMargin = DensityUtils.dp2px(context, 20);
         this.addView(volumeContainer, volumeLayoutParams);
 
-        volumeMinusImageView= (ImageView) volumeContainer.findViewById(R.id.volumeMinusImageView);
-        volumeAddImageView= (ImageView) volumeContainer.findViewById(R.id.volumeAddImageView);
-        volumeProgressBar= (ProgressBar) volumeContainer.findViewById(R.id.volumeProgressBar);
+        volumeMinusImageView = (ImageView) volumeContainer.findViewById(R.id.volumeMinusImageView);
+        volumeAddImageView = (ImageView) volumeContainer.findViewById(R.id.volumeAddImageView);
+        volumeProgressBar = (ProgressBar) volumeContainer.findViewById(R.id.volumeProgressBar);
         volumeProgressBar.setMax(maxVolume);
         volumeProgressBar.setProgress(currentVolume);
         back = (ImageView) titleContainer.findViewById(R.id.back);
@@ -179,7 +182,7 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
                 bottomContainer.setVisibility(View.GONE);
                 pauseImageView.setVisibility(View.GONE);
 
-                if(volumeContainer.getVisibility()==View.VISIBLE){
+                if (volumeContainer.getVisibility() == View.VISIBLE) {
                     volumeContainer.setVisibility(View.GONE);
                 }
 
@@ -197,7 +200,7 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
                 if (mediaPlayer == null || !isPrepared) {
                     return false;
                 }
-                isScroll=true;
+                isScroll = true;
                 Log.i("actionX", "surfaceView---onScroll:" + distanceX + "--" + distanceY);
                 if (Math.abs(distanceX) >= Math.abs(distanceY)) {
                     GESTURE_FLAG = GESTURE_MODIFY_PROGRESS;
@@ -230,23 +233,23 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
 
                     GESTURE_FLAG = GESTURE_MODIFY_VOLUME;
 
-                    if(volumeContainer.getVisibility()==View.GONE){
+                    if (volumeContainer.getVisibility() == View.GONE) {
                         volumeContainer.setVisibility(View.VISIBLE);
                         volumeContainer.setAnimation(showAnimation);
                         showAnimation.start();
                     }
-                    currentVolume=audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                    currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
-                    if(distanceY > DensityUtils.dp2px(context, STEP_PROGRESS)){
-                        if(currentVolume<maxVolume){
-                            currentVolume=currentVolume+1;
+                    if (distanceY > DensityUtils.dp2px(context, STEP_PROGRESS)) {
+                        if (currentVolume < maxVolume) {
+                            currentVolume = currentVolume + 1;
                         }
-                    }else if(distanceY < -DensityUtils.dp2px(context, STEP_PROGRESS)){
-                        if(currentVolume>0){
-                            currentVolume=currentVolume-1;
+                    } else if (distanceY < -DensityUtils.dp2px(context, STEP_PROGRESS)) {
+                        if (currentVolume > 0) {
+                            currentVolume = currentVolume - 1;
                         }
                     }
-                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,currentVolume,0);
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0);
                     volumeProgressBar.setProgress(currentVolume);
                 }
                 return super.onScroll(e1, e2, distanceX, distanceY);
@@ -268,17 +271,17 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
 
                             volumeContainer.clearAnimation();
 
-                            isPlaying=mediaPlayer.isPlaying();
-                            isScroll=false;
+                            isPlaying = mediaPlayer.isPlaying();
+                            isScroll = false;
                             if (mediaPlayer.isPlaying()) {
                                 pauseImageView.setImageResource(R.drawable.ic_play);
                             } else {
                                 pauseImageView.setImageResource(R.drawable.ic_pause);
                             }
                             if (titleContainer.getVisibility() == View.VISIBLE && bottomContainer.getVisibility() == View.VISIBLE) {
-                                isVisible=true;
-                            }else{
-                                isVisible=false;
+                                isVisible = true;
+                            } else {
+                                isVisible = false;
                                 pauseImageView.setVisibility(View.VISIBLE);
                                 titleContainer.setVisibility(View.VISIBLE);
                                 bottomContainer.setVisibility(View.VISIBLE);
@@ -296,12 +299,12 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
                         if (mediaPlayer == null || !isPrepared) {
                             return false;
                         }
-                        if(isPlaying){
+                        if (isPlaying) {
                             mediaPlayer.start();
                             pauseImageView.setImageResource(R.drawable.ic_play);
-                            if(isVisible && !isScroll){
+                            if (isVisible && !isScroll) {
                                 handler.post(hiddenRunnable);
-                            }else {
+                            } else {
                                 handler.postDelayed(hiddenRunnable, 3000);
                             }
                         }
@@ -412,13 +415,13 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
         volumeAddImageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mediaPlayer==null || !isPrepared){
+                if (mediaPlayer == null || !isPrepared) {
                     return;
                 }
                 handler.removeCallbacks(hiddenRunnable);
-                handler.postDelayed(hiddenRunnable,3000);
-                if(currentVolume<maxVolume){
-                    currentVolume=currentVolume+1;
+                handler.postDelayed(hiddenRunnable, 3000);
+                if (currentVolume < maxVolume) {
+                    currentVolume = currentVolume + 1;
                     audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0);
                     volumeProgressBar.setProgress(currentVolume);
                 }
@@ -428,14 +431,14 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
         volumeMinusImageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mediaPlayer==null || !isPrepared){
+                if (mediaPlayer == null || !isPrepared) {
                     return;
                 }
                 handler.removeCallbacks(hiddenRunnable);
-                handler.postDelayed(hiddenRunnable,3000);
-                if(currentVolume>0){
-                    currentVolume=currentVolume-1;
-                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,currentVolume,0);
+                handler.postDelayed(hiddenRunnable, 3000);
+                if (currentVolume > 0) {
+                    currentVolume = currentVolume - 1;
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0);
                     volumeProgressBar.setProgress(currentVolume);
                 }
             }
@@ -631,7 +634,7 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
                         bottomContainer.setAnimation(hiddenAnimation);
                         titleContainer.setAnimation(hiddenAnimation);
                         pauseImageView.setAnimation(hiddenAnimation);
-                        if(volumeContainer.getVisibility()==View.VISIBLE){
+                        if (volumeContainer.getVisibility() == View.VISIBLE) {
                             volumeContainer.setAnimation(hiddenAnimation);
                         }
                         hiddenAnimation.start();
