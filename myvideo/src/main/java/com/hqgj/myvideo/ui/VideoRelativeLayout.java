@@ -384,7 +384,9 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
         collection.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 onClickVideoListener.onClickCollection();
+
             }
         });
         pauseImageView.setOnClickListener(new OnClickListener() {
@@ -681,5 +683,14 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
             bottomContainer.clearAnimation();
         }
     }
+
+    public void setIsCollection(boolean isCollection){
+        if(isCollection){
+            collection.setImageResource(R.drawable.ic_collection_press);
+        }else {
+            collection.setImageResource(R.drawable.ic_collection);
+        }
+    }
+
 
 }
