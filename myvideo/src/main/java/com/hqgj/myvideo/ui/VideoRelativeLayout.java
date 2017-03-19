@@ -34,7 +34,9 @@ import java.io.IOException;
  * author: ly
  * data: 2016/6/27
  */
-public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener {
+public class VideoRelativeLayout extends RelativeLayout implements
+        MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
+        MediaPlayer.OnBufferingUpdateListener,MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener {
 
     private Context context;
     private View titleContainer;
@@ -488,6 +490,12 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
         handler.postDelayed(hiddenRunnable, 5000);
     }
 
+    // todo 网络流媒体的缓冲监听
+    @Override
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        Log.e("onBufferingUpdate",""+percent);
+    }
+
     class MyCallback implements SurfaceHolder.Callback {
 
         @Override
@@ -550,6 +558,8 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
     @Override
     public void onPrepared(MediaPlayer mp) {
 
+        Toast.makeText(context,"onPrepared",Toast.LENGTH_LONG).show();
+
         seekBar.setMax(mp.getDuration());
 
         isPrepared = true;
@@ -567,6 +577,8 @@ public class VideoRelativeLayout extends RelativeLayout implements MediaPlayer.O
         totalTime.setText("" + TimeUtil.formatTime(mp.getDuration()));
 
         handler.post(runnable);
+
+        mediaPlayer.setOnBufferingUpdateListener(this);
 
     }
 

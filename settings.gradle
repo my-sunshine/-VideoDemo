@@ -1,1 +1,1 @@
-include ':app', ':myvideo'
+include ':app', ':myvideo', ':mediaplayervideo', ':myapplication'
